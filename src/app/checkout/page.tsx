@@ -89,6 +89,16 @@ export default function CheckoutPage() {
     );
   }
 
+  const getErrorMessage = () => {
+    if (errorCode === 409) {
+      return '❌ Not enough stock available. Please try a different quantity or warehouse.';
+    }
+    if (errorCode === 410) {
+      return '⏰ Reservation expired. Please try again.';
+    }
+    return `❌ ${error}`;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 p-4">
       <div className="max-w-md mx-auto mt-12">
@@ -110,15 +120,11 @@ export default function CheckoutPage() {
               }`}
             >
               <p
-                className={${
+                className={
                   errorCode === 409 ? 'text-red-800' : errorCode === 410 ? 'text-yellow-800' : 'text-red-800'
-                }}`}
+                }
               >
-                {errorCode === 409
-                  ? '❌ Not enough stock available. Please try a different quantity or warehouse.'
-                  : errorCode === 410
-                  ? '⏰ Reservation expired. Please try again.'
-                  : `❌ ${error}`}
+                {getErrorMessage()}
               </p>
             </div>
           )}
