@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';
 
-export async function GET(request: Request) {
+export async function GET(req: Request) {
   // Verify this is a cron request from Vercel
-  const authHeader = request.headers.get('authorization');
+  const authHeader = req.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json(
       { error: 'Unauthorized' },
