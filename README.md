@@ -46,7 +46,7 @@ A production-grade inventory management platform with concurrent reservation han
 
 ## Features
 
-✅ **Concurrent Reservation System** - Race-condition-free using SQLite with Prisma transactions  
+✅ **Concurrent Reservation System** - Race-condition-free using PostgreSQL with Prisma transactions  
 ✅ **Multi-Warehouse Inventory** - Manage stock across multiple locations  
 ✅ **Real-Time Stock Tracking** - Separate reserved and available units  
 ✅ **Live Countdown Timer** - 10-minute reservation window with visual feedback  
@@ -61,8 +61,8 @@ A production-grade inventory management platform with concurrent reservation han
 
 - **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes, TypeScript, Zod validation
-- **Database**: SQLite + Prisma ORM (zero-config, file-based)
-- **Concurrency Control**: Prisma transactions with optimistic locking
+- **Database**: Hosted PostgreSQL (e.g., Supabase/Neon) + Prisma ORM
+- **Concurrency Control**: Prisma transactions with PostgreSQL `FOR UPDATE` row-level locks
 - **Deployment**: Vercel + Railway (auto-deployment from GitHub)
 - **Source Control**: Git with clean commit history
 
@@ -158,8 +158,7 @@ Reservation {
 allo-health/
 ├── prisma/
 │   ├── schema.prisma         # Database models & schema
-│   ├── seed.ts               # Sample data (4 products, 3 warehouses)
-│   └── dev.db                # SQLite database (auto-created)
+│   └── seed.js               # Sample data (4 products, 3 warehouses)
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx          # Product listing page
@@ -193,7 +192,7 @@ allo-health/
 ### Prerequisites
 
 - Node.js 18+
-- SQLite (included with Prisma)
+- Hosted PostgreSQL Database (Supabase, Neon, etc.)
 
 ### Local Setup
 
@@ -334,10 +333,9 @@ curl -X POST http://localhost:3000/api/reservations \
 
 ## Design Decisions
 
-### 1. SQLite Database (Simplicity)
-- **Why**: Zero-config, file-based, no server needed
-- **Trade-off**: Single-process concurrency (fine for most workloads)
-- **Scalability**: For millions of requests, upgrade to PostgreSQL
+### 1. PostgreSQL Database
+- **Why**: Handles concurrent transactions efficiently, required for `FOR UPDATE` row-level locking.
+- **Scalability**: Can handle high throughput and thousands of concurrent users.
 
 ### 2. Prisma Transactions (Concurrency)
 - **Why**: Simple, ACID guarantees, type-safe
@@ -366,11 +364,9 @@ curl -X POST http://localhost:3000/api/reservations \
 | Reserve latency | 50-100ms | Transaction overhead |
 | Confirm latency | 30-50ms | Stock update |
 | Product list | 100-200ms | Database query |
-| Concurrent capacity | 100+ req/s per instance | SQLite limitation |
+| Concurrent capacity | Thousands of req/s | PostgreSQL limitation |
 
 **Optimization**: Strategic indexes on `productId_warehouseId` and `expiresAt`
-
-**Scaling up**: If you outgrow SQLite, migrate to PostgreSQL (Prisma makes this seamless)
 
 ---
 
