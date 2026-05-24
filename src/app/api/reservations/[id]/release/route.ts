@@ -4,7 +4,7 @@ import { prisma } from '@/lib/prisma';
 export const runtime = 'nodejs';
 
 export async function POST(
-  req: NextRequest,
+  _req: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
