@@ -1,4 +1,7 @@
-export const API_BASE = process.env.NEXT_PUBLIC_API_URL || '';
+const envBase = process.env.NEXT_PUBLIC_API_URL;
+const isLocalhost = envBase ? /localhost|127\.0\.0\.1/.test(envBase) : false;
+
+export const API_BASE = envBase && !isLocalhost ? envBase : '';
 
 export async function apiCall<T>(
   path: string,
