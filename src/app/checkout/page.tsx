@@ -1,5 +1,6 @@
 'use client';
 
+import { Suspense } from 'react';
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { apiCall } from '@/lib/api-client';
@@ -11,7 +12,7 @@ interface Warehouse {
   location: string;
 }
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const searchParams = useSearchParams();
   const productId = searchParams.get('productId');
   const warehouseId = searchParams.get('warehouseId');
@@ -166,5 +167,13 @@ export default function CheckoutPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading...</div>}>
+      <CheckoutContent />
+    </Suspense>
   );
 }
