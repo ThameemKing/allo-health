@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { Suspense } from 'react';
 import { apiCall } from '@/lib/api-client';
 import Link from 'next/link';
 
@@ -17,7 +18,7 @@ interface Reservation {
   warehouse: { name: string };
 }
 
-export default function ReservationPage() {
+function ReservationContent() {
   const params = useParams();
   const router = useRouter();
   const reservationId = params.id as string;
@@ -221,5 +222,13 @@ export default function ReservationPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ReservationPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center">Loading reservation...</div>}>
+      <ReservationContent />
+    </Suspense>
   );
 }
