@@ -17,19 +17,18 @@ export async function POST(req: NextRequest) {
     const { productId, warehouseId, quantity } = ReserveSchema.parse(body);
 
     const reservation = await prisma.$transaction(async (tx) => {
-      // Lock the stock row using SELECT FOR UPDATE
-      const stock = await tx.$queryRaw`
-        SELECT id, "totalUnits", "reservedUnits" 
-        FROM "Stock" 
-        WHERE "productId" = ${productId} AND "warehouseId" = ${warehouseId}
-        FOR UPDATE
-      ` as any[];
+      // Get the stock row
+      const stock = await tx.stock.findUnique({
+        where: {
+          productId_warehouseId: { productId, warehouseId },
+        },
+      });
 
-      if (!stock || stock.length === 0) {
+      if (!stock) {
         throw new Error('Stock not found');
       }
 
-      const availableUnits = stock[0].totalUnits - stock[0].reservedUnits;
+      const availableUnits = stock.totalUnits - stock.reservedUnits;
 
       if (availableUnits < quantity) {
         const error = new Error('Insufficient stock');
