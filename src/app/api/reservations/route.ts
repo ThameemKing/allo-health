@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 const ReserveSchema = z.object({
   productId: z.string().cuid('Invalid product ID'),
