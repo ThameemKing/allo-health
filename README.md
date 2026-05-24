@@ -4,8 +4,7 @@ This repository contains the implementation for the Allo Health Inventory and Or
 
 ## Live Deployments
 
-- **Vercel Application**: https://allo-health.vercel.app
-- **Railway Application**: https://allo-health-production-592a.up.railway.app
+- **Vercel Application**: https://allo-health-mu.vercel.app
 
 ## Requirements Addressed
 
@@ -44,14 +43,14 @@ Reservations that are not confirmed within the 10-minute window are automaticall
 
 - **Frontend**: Next.js 14 (App Router), React, TypeScript, Tailwind CSS
 - **Backend**: Next.js API Routes, Zod Validation
-- **Database**: PostgreSQL (Supabase/Neon) and Prisma ORM
+- **Database**: PostgreSQL (Neon) and Prisma ORM
 - **Concurrency**: PostgreSQL Row-Level Locks (`FOR UPDATE`)
 
 ## Local Setup Instructions
 
 ### Prerequisites
 - Node.js 18 or higher
-- Access to a PostgreSQL Database (e.g., Supabase, Neon)
+- Access to a PostgreSQL Database (e.g., Neon)
 
 ### Installation Steps
 
