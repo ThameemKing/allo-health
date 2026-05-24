@@ -76,7 +76,7 @@ model IdempotencyKey {
   method    String
   path      String
   statusCode Int
-  response  Json
+  response  String
   createdAt DateTime @default(now())
   expiresAt DateTime
 
