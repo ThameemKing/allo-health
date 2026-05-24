@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
+export const runtime = 'nodejs';
+
 const ReserveSchema = z.object({
   productId: z.string().cuid('Invalid product ID'),
   warehouseId: z.string().cuid('Invalid warehouse ID'),
