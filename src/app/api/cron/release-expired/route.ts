@@ -1,13 +1,11 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 export const runtime = 'nodejs';
 
-export const maxDuration = 60;
-
-export async function GET(req: NextRequest) {
+export async function GET(request: Request) {
   // Verify this is a cron request from Vercel
-  const authHeader = req.headers.get('authorization');
+  const authHeader = request.headers.get('authorization');
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json(
       { error: 'Unauthorized' },
